@@ -61,6 +61,8 @@
   const toggleText = document.getElementById('theme-toggle-text');
 
   function updateThemeToggle() {
+    if (!darkIcon || !lightIcon || !toggleText) return;
+    
     if (document.documentElement.classList.contains('dark')) {
       darkIcon.classList.add('hidden');
       lightIcon.classList.remove('hidden');
@@ -72,16 +74,18 @@
     }
   }
 
-  themeToggle.addEventListener('click', () => {
-    if (document.documentElement.classList.contains('dark')) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    }
-    updateThemeToggle();
-  });
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+      updateThemeToggle();
+    });
+  }
 
   // Initialize toggle state
   updateThemeToggle();

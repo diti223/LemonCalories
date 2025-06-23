@@ -1,4 +1,4 @@
-# 🍋 Lemon Calories - AI Recipe Nutrition Analysis
+# Lemon Macros Landing Page
 
 Transform any recipe into detailed nutrition data with AI-powered analysis. From messy ingredient lists to precise macro breakdowns in seconds.
 
@@ -13,7 +13,7 @@ Transform any recipe into detailed nutrition data with AI-powered analysis. From
 
 ## 🚀 Live Demo
 
-Visit: [calories.lemonnutrition.eu](https://calories.lemonnutrition.eu)
+Visit: [macros.lemonnutrition.eu](https://macros.lemonnutrition.eu)
 
 ## 🛠️ Tech Stack
 
@@ -124,7 +124,7 @@ Current targets:
 
 1. Push to `main` branch
 2. Enable GitHub Pages in repository settings
-3. Set custom domain: `calories.lemonnutrition.eu`
+3. Set custom domain: `macros.lemonnutrition.eu`
 4. Configure CNAME record in DNS
 
 ### Alternative Deployments
