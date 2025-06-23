@@ -1,0 +1,129 @@
+---
+import type { MacroData } from '../../types/recipe';
+
+export interface Props {
+  totalMacros: MacroData;
+  servings: number;
+}
+
+const { totalMacros, servings = 2 } = Astro.props;
+
+// Demo data if none provided
+const defaultTotalMacros: MacroData = {
+  calories: 982,
+  protein: 121.4,
+  carbs: 20.2,
+  fat: 42.6
+};
+
+const displayTotalMacros = totalMacros || defaultTotalMacros;
+
+const perServingMacros: MacroData = {
+  calories: Math.round(displayTotalMacros.calories / servings),
+  protein: Math.round((displayTotalMacros.protein / servings) * 10) / 10,
+  carbs: Math.round((displayTotalMacros.carbs / servings) * 10) / 10,
+  fat: Math.round((displayTotalMacros.fat / servings) * 10) / 10
+};
+---
+
+<div class="grid md:grid-cols-2 gap-8">
+  <div>
+    <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Total Recipe</h4>
+    <div class="space-y-4">
+      <div class="bg-lemon-50 dark:bg-lemon-900/20 rounded-xl p-4">
+        <div class="flex justify-between items-center">
+          <span class="font-medium text-gray-900 dark:text-white">Calories</span>
+          <span class="text-2xl font-bold text-lemon-600 dark:text-lemon-400" id="total-calories">
+            {displayTotalMacros.calories}
+          </span>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          Calculated: ({displayTotalMacros.protein}g × 4.1) + ({displayTotalMacros.carbs}g × 4.1) + ({displayTotalMacros.fat}g × 8.84)
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-3 gap-4">
+        <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+          <div class="text-xl font-bold text-blue-600 dark:text-blue-400" id="total-protein">
+            {displayTotalMacros.protein}g
+          </div>
+          <div class="text-xs text-gray-600 dark:text-gray-400">Protein</div>
+        </div>
+        <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-xl">
+          <div class="text-xl font-bold text-green-600 dark:text-green-400" id="total-carbs">
+            {displayTotalMacros.carbs}g
+          </div>
+          <div class="text-xs text-gray-600 dark:text-gray-400">Carbs</div>
+        </div>
+        <div class="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
+          <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="total-fat">
+            {displayTotalMacros.fat}g
+          </div>
+          <div class="text-xs text-gray-600 dark:text-gray-400">Fat</div>
+        </div>
+      </div>
+      
+      <div class="text-sm text-gray-500 dark:text-gray-400">
+        Total weight: <span id="total-weight">982g (2.16 lbs)</span>
+      </div>
+    </div>
+  </div>
+  
+  <div>
+    <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Per Serving (1 of {servings})</h4>
+    <div class="space-y-4">
+      <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
+        <div class="flex justify-between items-center">
+          <span class="font-medium text-gray-900 dark:text-white">Calories</span>
+          <span class="text-2xl font-bold text-green-600 dark:text-green-400" id="serving-calories">
+            {perServingMacros.calories}
+          </span>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-3 gap-4">
+        <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+          <div class="text-xl font-bold text-blue-600 dark:text-blue-400" id="serving-protein">
+            {perServingMacros.protein}g
+          </div>
+          <div class="text-xs text-gray-600 dark:text-gray-400">Protein</div>
+        </div>
+        <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-xl">
+          <div class="text-xl font-bold text-green-600 dark:text-green-400" id="serving-carbs">
+            {perServingMacros.carbs}g
+          </div>
+          <div class="text-xs text-gray-600 dark:text-gray-400">Carbs</div>
+        </div>
+        <div class="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
+          <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="serving-fat">
+            {perServingMacros.fat}g
+          </div>
+          <div class="text-xs text-gray-600 dark:text-gray-400">Fat</div>
+        </div>
+      </div>
+      
+      <div class="text-sm text-gray-500 dark:text-gray-400">
+        Serving weight: <span id="serving-weight">{Math.round(982 / servings)}g ({Math.round((982 / servings) * 0.00220462 * 100) / 100} lbs)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-6 text-xs text-gray-500 dark:text-gray-400 italic">
+  Ultra-precise: Weight-based macro calculations from nutrition database (per 100g)
+</div>
+
+<script>
+  import { animateCounter } from '../../utils/animation';
+
+  // Listen for AI processing completion to animate counters
+  window.addEventListener('ai-processing-complete', () => {
+    setTimeout(() => {
+      const totalCaloriesEl = document.querySelector('#total-calories') as HTMLElement;
+      const servingCaloriesEl = document.querySelector('#serving-calories') as HTMLElement;
+      
+      if (totalCaloriesEl) animateCounter(totalCaloriesEl, 0, 982, 1500);
+      if (servingCaloriesEl) animateCounter(servingCaloriesEl, 0, 491, 1500);
+    }, 500);
+  });
+</script> 

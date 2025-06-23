@@ -1,0 +1,167 @@
+---
+export interface Props {
+  baseServings?: number;
+  currentServings?: number;
+}
+
+const { baseServings = 2, currentServings = 2 } = Astro.props;
+
+const servingOptions = [1, 2, 3, 4, 6, 8];
+---
+
+<div class="space-y-6">
+  <div>
+    <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Smart Scaling Calculator</h4>
+    <div class="flex flex-wrap gap-2 mb-4">
+      {servingOptions.map(serving => (
+        <button 
+          class:list={[
+            "serving-btn px-4 py-2 rounded-lg border-2 transition-colors",
+            serving === currentServings 
+              ? "border-lemon-500 bg-lemon-50 dark:bg-lemon-900/20 text-lemon-600 dark:text-lemon-400"
+              : "border-gray-200 dark:border-gray-700 hover:border-lemon-500 dark:hover:border-lemon-400"
+          ]}
+          data-servings={serving}
+        >
+          {serving} serving{serving > 1 ? 's' : ''}
+        </button>
+      ))}
+    </div>
+    
+    <div class="bg-lemon-50 dark:bg-lemon-900/20 rounded-xl p-4 mb-6">
+      <div class="text-center">
+        <div class="text-lg font-medium text-gray-900 dark:text-white">
+          Scaling by <span id="scale-factor" class="text-lemon-600 dark:text-lemon-400 font-bold">1.0x</span>
+        </div>
+        <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Total: <span id="scaled-total-calories">982</span> cal | Per serving: <span id="scaled-serving-calories">491</span> cal
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="space-y-3" id="scaled-ingredients">
+    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <span class="font-medium text-gray-900 dark:text-white">
+        <span class="scaled-quantity">2</span> chicken breasts 
+        <span class="text-gray-500 dark:text-gray-400 text-sm">(400g)</span>
+      </span>
+      <span class="text-sm text-gray-600 dark:text-gray-400">Whole items → integers</span>
+    </div>
+    
+    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <span class="font-medium text-gray-900 dark:text-white">
+        <span class="scaled-quantity">4</span> cups mixed greens 
+        <span class="text-gray-500 dark:text-gray-400 text-sm">(120g)</span>
+      </span>
+      <span class="text-sm text-gray-600 dark:text-gray-400">Even cups</span>
+    </div>
+    
+    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <span class="font-medium text-gray-900 dark:text-white">
+        <span class="scaled-quantity">1/2</span> cucumber 
+        <span class="text-gray-500 dark:text-gray-400 text-sm">(150g)</span>
+      </span>
+      <span class="text-sm text-gray-600 dark:text-gray-400">Smart fractions</span>
+    </div>
+    
+    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <span class="font-medium text-gray-900 dark:text-white">
+        <span class="scaled-quantity">2</span> tbsp olive oil 
+        <span class="text-gray-500 dark:text-gray-400 text-sm">(30ml)</span>
+      </span>
+      <span class="text-sm text-gray-600 dark:text-gray-400">Measurable units</span>
+    </div>
+  </div>
+  
+  <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 mt-6">
+    <div class="flex items-center gap-3 mb-2">
+      <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+      </svg>
+      <h5 class="font-medium text-blue-900 dark:text-blue-100">Smart Rounding Applied</h5>
+    </div>
+    <p class="text-blue-800 dark:text-blue-200 text-sm">
+      Our system intelligently rounds quantities to practical cooking measurements. 
+      No more 1.75 eggs or 23.7g of flour!
+    </p>
+  </div>
+</div>
+
+<script>
+  import { ingredientsData, smartRound, formatQuantity, getDisplayIngredients } from '../../utils/scaling';
+
+  function updateScaling(servings: number): void {
+    const scaleFactor = servings / 2; // Base recipe is for 2 servings
+    
+    const scaleFactorEl = document.getElementById('scale-factor');
+    if (scaleFactorEl) {
+      scaleFactorEl.textContent = `${scaleFactor}x`;
+    }
+    
+    // Update scaled ingredients display
+    const scaledIngredientsContainer = document.getElementById('scaled-ingredients');
+    if (scaledIngredientsContainer) {
+      scaledIngredientsContainer.innerHTML = '';
+      
+      const displayIngredients = getDisplayIngredients();
+      
+      displayIngredients.forEach(ingredient => {
+        const data = ingredientsData[ingredient.key];
+        const rawQuantity = data.baseQuantity * scaleFactor;
+        const scaledQuantity = smartRound(rawQuantity, data.unit, data.type);
+        const scaledWeight = Math.round(data.baseWeight * scaleFactor);
+        const formattedQuantity = formatQuantity(scaledQuantity);
+        
+        const div = document.createElement('div');
+        div.className = 'flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg';
+        div.innerHTML = `
+          <span class="font-medium text-gray-900 dark:text-white">
+            <span class="scaled-quantity">${formattedQuantity}</span> ${ingredient.name}
+            <span class="text-gray-500 dark:text-gray-400 text-sm">(${scaledWeight}g)</span>
+          </span>
+          <span class="text-sm text-gray-600 dark:text-gray-400">${ingredient.note}</span>
+        `;
+        scaledIngredientsContainer.appendChild(div);
+      });
+    }
+    
+    // Update totals
+    const totalCalories = Math.round(982 * scaleFactor);
+    const servingCalories = Math.round(totalCalories / servings);
+    
+    const scaledTotalCaloriesEl = document.getElementById('scaled-total-calories');
+    const scaledServingCaloriesEl = document.getElementById('scaled-serving-calories');
+    
+    if (scaledTotalCaloriesEl) {
+      scaledTotalCaloriesEl.textContent = totalCalories.toString();
+    }
+    if (scaledServingCaloriesEl) {
+      scaledServingCaloriesEl.textContent = servingCalories.toString();
+    }
+  }
+
+  // Initialize scaling calculator
+  document.addEventListener('DOMContentLoaded', () => {
+    // Serving size buttons
+    document.querySelectorAll('.serving-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const servingsStr = (button as HTMLElement).dataset.servings;
+        if (servingsStr) {
+          const servings = parseInt(servingsStr);
+          
+          // Update active button
+          document.querySelectorAll('.serving-btn').forEach(btn => {
+            btn.classList.remove('border-lemon-500', 'bg-lemon-50', 'dark:bg-lemon-900/20', 'text-lemon-600', 'dark:text-lemon-400');
+            btn.classList.add('border-gray-200', 'dark:border-gray-700');
+          });
+          button.classList.add('border-lemon-500', 'bg-lemon-50', 'dark:bg-lemon-900/20', 'text-lemon-600', 'dark:text-lemon-400');
+          button.classList.remove('border-gray-200', 'dark:border-gray-700');
+          
+          // Update scaling
+          updateScaling(servings);
+        }
+      });
+    });
+  });
+</script> 

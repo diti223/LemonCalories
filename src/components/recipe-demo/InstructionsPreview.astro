@@ -1,0 +1,82 @@
+---
+export interface Props {
+  instructions?: string[];
+  showPremiumTeaser?: boolean;
+}
+
+const { instructions = [], showPremiumTeaser = true } = Astro.props;
+
+// Demo instructions if none provided
+const defaultInstructions = [
+  "Season 2 chicken breasts with salt and pepper",
+  "Grill chicken breasts until internal temp reaches 165°F (7-8 minutes per side)",
+  "Let chicken rest for 5 minutes, then slice",
+  "Dice 1/2 cucumber and chop 1 medium tomato",
+  "Slice 1/4 red onion thinly",
+  "Combine greens, cucumber, tomato, and onion in large bowl",
+  "Top with sliced chicken",
+  "Drizzle with olive oil and lemon juice before serving"
+];
+
+const displayInstructions = instructions.length > 0 ? instructions : defaultInstructions;
+---
+
+<div class="space-y-4">
+  <ol class="space-y-3 text-gray-700 dark:text-gray-300">
+    {displayInstructions.map((instruction, index) => (
+      <li class="flex gap-4">
+        <span class="flex-shrink-0 w-6 h-6 bg-lemon-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+          {index + 1}
+        </span>
+        <span>{instruction}</span>
+      </li>
+    ))}
+  </ol>
+  
+  {showPremiumTeaser && (
+    <div class="bg-gradient-to-r from-lemon-50 to-orange-50 dark:from-lemon-900/20 dark:to-orange-900/20 rounded-xl p-6 mt-8">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-8 h-8 bg-gradient-to-r from-lemon-500 to-orange-500 rounded-lg flex items-center justify-center">
+          <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <h4 class="font-semibold text-gray-900 dark:text-white">🔒 Unlock Premium Instructions</h4>
+      </div>
+      <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+        Get detailed cooking tips, timing guidance, and dietary adaptations with our premium features.
+      </p>
+      
+      <div class="grid md:grid-cols-2 gap-4 mb-4">
+        <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Professional cooking techniques</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Timing and temperature guides</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Dietary adaptations (keto, vegan)</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Ingredient substitutions</span>
+        </div>
+      </div>
+      
+      <button class="text-lemon-600 dark:text-lemon-400 font-medium text-sm hover:text-lemon-700 dark:hover:text-lemon-300 transition-colors">
+        Learn More →
+      </button>
+    </div>
+  )}
+</div> 

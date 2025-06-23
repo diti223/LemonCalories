@@ -1,0 +1,104 @@
+---
+import type { ParsedIngredient } from '../../types/recipe';
+
+export interface Props {
+  ingredients: ParsedIngredient[];
+}
+
+const { ingredients } = Astro.props;
+
+// Demo ingredients data
+const demoIngredients: ParsedIngredient[] = [
+  {
+    id: 'chicken-breast',
+    name: '2 large chicken breasts',
+    quantity: '2',
+    unit: 'large',
+    weight: '(400g / 0.88 lbs)',
+    macros: { calories: 620, protein: 116, carbs: 0, fat: 14 }
+  },
+  {
+    id: 'mixed-greens',
+    name: '4 cups mixed greens',
+    quantity: '4',
+    unit: 'cups',
+    weight: '(120g / 4.2 oz)',
+    macros: { calories: 24, protein: 2.4, carbs: 4.8, fat: 0.4 }
+  },
+  {
+    id: 'cucumber',
+    name: '1/2 cucumber diced',
+    quantity: '1/2',
+    unit: 'whole',
+    weight: '(150g / 5.3 oz)',
+    macros: { calories: 16, protein: 1.0, carbs: 3.9, fat: 0.2 }
+  },
+  {
+    id: 'tomato',
+    name: '1 medium tomato chopped',
+    quantity: '1',
+    unit: 'medium',
+    weight: '(180g / 6.3 oz)',
+    macros: { calories: 32, protein: 1.6, carbs: 7.0, fat: 0.4 }
+  },
+  {
+    id: 'red-onion',
+    name: '1/4 red onion sliced',
+    quantity: '1/4',
+    unit: 'whole',
+    weight: '(40g / 1.4 oz)',
+    macros: { calories: 16, protein: 0.4, carbs: 3.7, fat: 0.0 }
+  },
+  {
+    id: 'olive-oil',
+    name: '2 tbsp olive oil',
+    quantity: '2',
+    unit: 'tbsp',
+    weight: '(30ml / 1.0 fl oz)',
+    macros: { calories: 270, protein: 0.0, carbs: 0.0, fat: 30.0 }
+  },
+  {
+    id: 'lemon-juice',
+    name: '1 lemon juice squeeze',
+    quantity: '1',
+    unit: 'squeeze',
+    weight: '(15ml / 0.5 fl oz)',
+    macros: { calories: 4, protein: 0.1, carbs: 1.3, fat: 0.0 }
+  }
+];
+
+const displayIngredients = ingredients.length > 0 ? ingredients : demoIngredients;
+---
+
+<div class="space-y-4">
+  <div class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+    *Calories calculated: (protein × 4.1) + (carbs × 4.1) + (fat × 8.84)
+  </div>
+  
+  {displayIngredients.map((ingredient, index) => (
+    <div 
+      class:list={[
+        "ingredient-row flex justify-between items-center pb-4",
+        index < displayIngredients.length - 1 ? "border-b border-gray-100 dark:border-gray-800" : ""
+      ]}
+      data-ingredient={ingredient.id}
+    >
+      <div>
+        <div class="font-medium text-gray-900 dark:text-white">
+          <span class="quantity">{ingredient.quantity}</span> {ingredient.name.replace(/^[\d\/\s]+/, '')}
+          <span class="weight text-gray-500 dark:text-gray-400">{ingredient.weight}</span>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="font-semibold text-gray-900 dark:text-white">
+          <span class="calories">{ingredient.macros.calories}</span> cal
+        </div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">
+          <span class="protein">{ingredient.macros.protein}</span>g protein, 
+          <span class="carbs">{ingredient.macros.carbs}</span>g carbs, 
+          <span class="fat">{ingredient.macros.fat}</span>g fat
+        </div>
+      </div>
+    </div>
+  ))}
+</div> 

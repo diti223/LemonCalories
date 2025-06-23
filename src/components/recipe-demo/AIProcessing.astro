@@ -1,0 +1,53 @@
+---
+export interface Props {
+  isVisible: boolean;
+}
+
+const { isVisible = false } = Astro.props;
+---
+
+<div 
+  id="ai-processing" 
+  class:list={[
+    "absolute inset-0 bg-gray-50 dark:bg-gray-800 rounded-xl flex items-center justify-center",
+    isVisible ? "" : "hidden"
+  ]}
+>
+  <div class="text-center">
+    <div class="inline-flex items-center gap-3 text-lemon-600 dark:text-lemon-400 text-lg font-medium">
+      <div class="w-3 h-3 bg-lemon-500 rounded-full animate-bounce"></div>
+      <div class="w-3 h-3 bg-lemon-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+      <div class="w-3 h-3 bg-lemon-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+      <span>AI Parsing</span>
+      <span id="processing-dots">...</span>
+    </div>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Analyzing ingredients and calculating nutrition</p>
+  </div>
+</div>
+
+<script>
+  import { animateProcessingDots } from '../../utils/animation';
+
+  // Listen for the typewriter completion
+  window.addEventListener('typewriter-complete', () => {
+    const processingElement = document.getElementById('ai-processing');
+    const dotsElement = document.getElementById('processing-dots');
+    
+    if (processingElement && dotsElement) {
+      // Show processing animation
+      processingElement.classList.remove('hidden');
+      
+      // Start dots animation
+      const stopDots = animateProcessingDots(dotsElement);
+      
+      // Hide after processing duration and show results
+      setTimeout(() => {
+        stopDots();
+        processingElement.classList.add('hidden');
+        
+        // Dispatch event to show results
+        window.dispatchEvent(new CustomEvent('ai-processing-complete'));
+      }, 3000);
+    }
+  });
+</script> 

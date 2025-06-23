@@ -1,0 +1,52 @@
+---
+export interface Props {
+  recipeText: string;
+  onComplete?: () => void;
+}
+
+const { recipeText, onComplete } = Astro.props;
+---
+
+<div class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden mb-8">
+  <div class="bg-gradient-to-r from-lemon-500 to-orange-500 px-8 py-6">
+    <h3 class="text-xl font-semibold text-white mb-2">Natural Language Recipe</h3>
+    <p class="text-lemon-100">Just paste any recipe - we'll handle the rest</p>
+  </div>
+  
+  <div class="p-8">
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 font-mono text-sm leading-relaxed min-h-[200px] relative">
+      <div id="typewriter-text" class="text-gray-700 dark:text-gray-300"></div>
+      <div id="typewriter-cursor" class="inline-block w-2 h-5 bg-lemon-500 ml-1 animate-pulse"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { TypewriterEffect } from '../../utils/animation';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const typewriterElement = document.getElementById('typewriter-text');
+    if (typewriterElement) {
+      const recipeText = document.currentScript?.getAttribute('data-recipe-text') || '';
+      const typewriter = new TypewriterEffect(typewriterElement as HTMLElement, recipeText, 30);
+      
+      typewriter.onComplete = () => {
+        const cursor = document.getElementById('typewriter-cursor');
+        if (cursor) cursor.style.display = 'none';
+        
+        // Dispatch custom event to notify parent
+        window.dispatchEvent(new CustomEvent('typewriter-complete'));
+      };
+      
+      // Start the typewriter effect after a delay
+      setTimeout(() => typewriter.start(), 1000);
+    }
+  });
+</script>
+
+<script is:inline define:vars={{ recipeText }}>
+  // Pass the recipe text to the script above
+  if (document.currentScript) {
+    document.currentScript.setAttribute('data-recipe-text', recipeText);
+  }
+</script> 
