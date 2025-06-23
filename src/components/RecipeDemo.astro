@@ -445,6 +445,19 @@
 </section>
 
 <script>
+  interface IngredientData {
+    baseQuantity: number;
+    baseWeight: number;
+    unit: string;
+    type: string;
+  }
+
+  interface DisplayIngredient {
+    name: string;
+    key: string;
+    note: string;
+  }
+
   // Recipe text for typewriter effect
   const recipeText = `Grilled Chicken Salad for Two
 
@@ -454,7 +467,7 @@ and quarter of a red onion sliced thin. Drizzle with 2 tablespoons of olive oil
 and a squeeze of lemon juice. Serves 2 people.`;
 
   // Ingredient data for scaling calculations
-  const ingredients = {
+  const ingredients: Record<string, IngredientData> = {
     'chicken-breast': { baseQuantity: 2, baseWeight: 400, unit: 'whole', type: 'protein' },
     'mixed-greens': { baseQuantity: 4, baseWeight: 120, unit: 'cups', type: 'vegetable' },
     'cucumber': { baseQuantity: 0.5, baseWeight: 150, unit: 'whole', type: 'vegetable' },
@@ -465,14 +478,20 @@ and a squeeze of lemon juice. Serves 2 people.`;
   };
 
   class TypewriterEffect {
-    constructor(element, text, speed = 50) {
+    private element: HTMLElement;
+    private text: string;
+    private speed: number;
+    private currentIndex: number;
+    public onComplete?: () => void;
+
+    constructor(element: HTMLElement, text: string, speed = 50) {
       this.element = element;
       this.text = text;
       this.speed = speed;
       this.currentIndex = 0;
     }
     
-    async start() {
+    async start(): Promise<void> {
       for (let i = 0; i < this.text.length; i++) {
         this.element.textContent += this.text[i];
         await this.delay(this.speed);
@@ -480,12 +499,12 @@ and a squeeze of lemon juice. Serves 2 people.`;
       this.onComplete?.();
     }
     
-    delay(ms) {
+    private delay(ms: number): Promise<void> {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
   }
 
-  function animateCounter(element, start, end, duration = 1000) {
+  function animateCounter(element: HTMLElement, start: number, end: number, duration = 1000): void {
     const range = end - start;
     const increment = range / (duration / 16);
     let current = start;
@@ -493,15 +512,15 @@ and a squeeze of lemon juice. Serves 2 people.`;
     const timer = setInterval(() => {
       current += increment;
       if (current >= end) {
-        element.textContent = Math.round(end);
+        element.textContent = Math.round(end).toString();
         clearInterval(timer);
       } else {
-        element.textContent = Math.round(current);
+        element.textContent = Math.round(current).toString();
       }
     }, 16);
   }
 
-  function smartRound(value, unit, type) {
+  function smartRound(value: number, unit: string, type: string): number {
     if (type === 'protein' || unit === 'whole') {
       return Math.round(value);
     }
@@ -515,128 +534,169 @@ and a squeeze of lemon juice. Serves 2 people.`;
     }
   }
 
-  function updateScaling(servings) {
+  function updateScaling(servings: number): void {
     const scaleFactor = servings / 2; // Base recipe is for 2 servings
     
-    document.getElementById('scale-factor').textContent = `${scaleFactor}x`;
+    const scaleFactorEl = document.getElementById('scale-factor');
+    if (scaleFactorEl) {
+      scaleFactorEl.textContent = `${scaleFactor}x`;
+    }
     
     // Update scaled ingredients display
     const scaledIngredientsContainer = document.getElementById('scaled-ingredients');
-    scaledIngredientsContainer.innerHTML = '';
-    
-    const displayIngredients = [
-      { name: 'chicken breasts', key: 'chicken-breast', note: 'Whole items → integers' },
-      { name: 'cups mixed greens', key: 'mixed-greens', note: 'Even cups' },
-      { name: 'cucumber', key: 'cucumber', note: 'Smart fractions' },
-      { name: 'tbsp olive oil', key: 'olive-oil', note: 'Measurable units' }
-    ];
-    
-    displayIngredients.forEach(ingredient => {
-      const data = ingredients[ingredient.key];
-      const scaledQuantity = smartRound(data.baseQuantity * scaleFactor, data.unit, data.type);
-      const scaledWeight = Math.round(data.baseWeight * scaleFactor);
+    if (scaledIngredientsContainer) {
+      scaledIngredientsContainer.innerHTML = '';
       
-      const div = document.createElement('div');
-      div.className = 'flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg';
-      div.innerHTML = `
-        <span class="font-medium text-gray-900 dark:text-white">
-          <span class="scaled-quantity">${scaledQuantity}</span> ${ingredient.name}
-          <span class="text-gray-500 dark:text-gray-400 text-sm">(${scaledWeight}g)</span>
-        </span>
-        <span class="text-sm text-gray-600 dark:text-gray-400">${ingredient.note}</span>
-      `;
-      scaledIngredientsContainer.appendChild(div);
-    });
+      const displayIngredients: DisplayIngredient[] = [
+        { name: 'chicken breasts', key: 'chicken-breast', note: 'Whole items → integers' },
+        { name: 'cups mixed greens', key: 'mixed-greens', note: 'Even cups' },
+        { name: 'cucumber', key: 'cucumber', note: 'Smart fractions' },
+        { name: 'tbsp olive oil', key: 'olive-oil', note: 'Measurable units' }
+      ];
+      
+      displayIngredients.forEach(ingredient => {
+        const data = ingredients[ingredient.key];
+        const scaledQuantity = smartRound(data.baseQuantity * scaleFactor, data.unit, data.type);
+        const scaledWeight = Math.round(data.baseWeight * scaleFactor);
+        
+        const div = document.createElement('div');
+        div.className = 'flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg';
+        div.innerHTML = `
+          <span class="font-medium text-gray-900 dark:text-white">
+            <span class="scaled-quantity">${scaledQuantity}</span> ${ingredient.name}
+            <span class="text-gray-500 dark:text-gray-400 text-sm">(${scaledWeight}g)</span>
+          </span>
+          <span class="text-sm text-gray-600 dark:text-gray-400">${ingredient.note}</span>
+        `;
+        scaledIngredientsContainer.appendChild(div);
+      });
+    }
     
     // Update totals
     const totalCalories = Math.round(982 * scaleFactor);
     const servingCalories = Math.round(totalCalories / servings);
     
-    document.getElementById('scaled-total-calories').textContent = totalCalories;
-    document.getElementById('scaled-serving-calories').textContent = servingCalories;
+    const scaledTotalCaloriesEl = document.getElementById('scaled-total-calories');
+    const scaledServingCaloriesEl = document.getElementById('scaled-serving-calories');
+    
+    if (scaledTotalCaloriesEl) {
+      scaledTotalCaloriesEl.textContent = totalCalories.toString();
+    }
+    if (scaledServingCaloriesEl) {
+      scaledServingCaloriesEl.textContent = servingCalories.toString();
+    }
   }
 
   // Initialize the demo when page loads
   document.addEventListener('DOMContentLoaded', () => {
     // Start typewriter effect
     const typewriterElement = document.getElementById('typewriter-text');
-    const typewriter = new TypewriterEffect(typewriterElement, recipeText, 30);
-    
-    typewriter.onComplete = () => {
-      // Hide cursor and show processing
-      document.getElementById('typewriter-cursor').style.display = 'none';
-      document.getElementById('ai-processing').classList.remove('hidden');
+    if (typewriterElement) {
+      const typewriter = new TypewriterEffect(typewriterElement as HTMLElement, recipeText, 30);
       
-      // Animate processing dots
-      let dotCount = 0;
-      const dotsElement = document.getElementById('processing-dots');
-      const dotsInterval = setInterval(() => {
-        dotsElement.textContent = '.'.repeat((dotCount % 3) + 1);
-        dotCount++;
-      }, 500);
-      
-      // Show results after processing
-      setTimeout(() => {
-        clearInterval(dotsInterval);
-        document.getElementById('ai-processing').classList.add('hidden');
+      typewriter.onComplete = () => {
+        // Hide cursor and show processing
+        const cursor = document.getElementById('typewriter-cursor');
+        const processing = document.getElementById('ai-processing');
         
-        const resultsSection = document.getElementById('results-section');
-        resultsSection.classList.remove('opacity-0', 'translate-y-8');
+        if (cursor) cursor.style.display = 'none';
+        if (processing) processing.classList.remove('hidden');
         
-        // Animate macro counters
-        setTimeout(() => {
-          animateCounter(document.querySelector('#total-calories'), 0, 982, 1500);
-          animateCounter(document.querySelector('#serving-calories'), 0, 491, 1500);
+        // Animate processing dots
+        let dotCount = 0;
+        const dotsElement = document.getElementById('processing-dots');
+        const dotsInterval = setInterval(() => {
+          if (dotsElement) {
+            dotsElement.textContent = '.'.repeat((dotCount % 3) + 1);
+          }
+          dotCount++;
         }, 500);
-      }, 3000);
-    };
-    
-    // Start the typewriter effect
-    setTimeout(() => typewriter.start(), 1000);
+        
+        // Show results after processing
+        setTimeout(() => {
+          clearInterval(dotsInterval);
+          
+          const processingEl = document.getElementById('ai-processing');
+          if (processingEl) processingEl.classList.add('hidden');
+          
+          const resultsSection = document.getElementById('results-section');
+          if (resultsSection) {
+            resultsSection.classList.remove('opacity-0', 'translate-y-8');
+          }
+          
+          // Animate macro counters
+          setTimeout(() => {
+            const totalCaloriesEl = document.querySelector('#total-calories') as HTMLElement;
+            const servingCaloriesEl = document.querySelector('#serving-calories') as HTMLElement;
+            
+            if (totalCaloriesEl) animateCounter(totalCaloriesEl, 0, 982, 1500);
+            if (servingCaloriesEl) animateCounter(servingCaloriesEl, 0, 491, 1500);
+          }, 500);
+        }, 3000);
+      };
+      
+      // Start the typewriter effect
+      setTimeout(() => typewriter.start(), 1000);
+    }
     
     // Tab functionality
     document.querySelectorAll('.tab-btn').forEach(button => {
       button.addEventListener('click', () => {
-        const targetTab = button.dataset.tab;
+        const targetTab = (button as HTMLElement).dataset.tab;
         
-        // Update active tab button
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-          btn.classList.remove('active', 'border-lemon-500', 'text-lemon-600', 'dark:text-lemon-400');
-          btn.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-        });
-        button.classList.add('active', 'border-lemon-500', 'text-lemon-600', 'dark:text-lemon-400');
-        button.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-        
-        // Show target tab content
-        document.querySelectorAll('.tab-content').forEach(content => {
-          content.classList.add('hidden');
-        });
-        document.getElementById(`${targetTab}-tab`).classList.remove('hidden');
+        if (targetTab) {
+          // Update active tab button
+          document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active', 'border-lemon-500', 'text-lemon-600', 'dark:text-lemon-400');
+            btn.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+          });
+          button.classList.add('active', 'border-lemon-500', 'text-lemon-600', 'dark:text-lemon-400');
+          button.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+          
+          // Show target tab content
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.add('hidden');
+          });
+          
+          const targetTabEl = document.getElementById(`${targetTab}-tab`);
+          if (targetTabEl) {
+            targetTabEl.classList.remove('hidden');
+          }
+        }
       });
     });
     
     // Serving size buttons
     document.querySelectorAll('.serving-btn').forEach(button => {
       button.addEventListener('click', () => {
-        const servings = parseInt(button.dataset.servings);
-        
-        // Update active button
-        document.querySelectorAll('.serving-btn').forEach(btn => {
-          btn.classList.remove('border-lemon-500', 'bg-lemon-50', 'dark:bg-lemon-900/20', 'text-lemon-600', 'dark:text-lemon-400');
-          btn.classList.add('border-gray-200', 'dark:border-gray-700');
-        });
-        button.classList.add('border-lemon-500', 'bg-lemon-50', 'dark:bg-lemon-900/20', 'text-lemon-600', 'dark:text-lemon-400');
-        button.classList.remove('border-gray-200', 'dark:border-gray-700');
-        
-        // Update scaling
-        updateScaling(servings);
+        const servingsStr = (button as HTMLElement).dataset.servings;
+        if (servingsStr) {
+          const servings = parseInt(servingsStr);
+          
+          // Update active button
+          document.querySelectorAll('.serving-btn').forEach(btn => {
+            btn.classList.remove('border-lemon-500', 'bg-lemon-50', 'dark:bg-lemon-900/20', 'text-lemon-600', 'dark:text-lemon-400');
+            btn.classList.add('border-gray-200', 'dark:border-gray-700');
+          });
+          button.classList.add('border-lemon-500', 'bg-lemon-50', 'dark:bg-lemon-900/20', 'text-lemon-600', 'dark:text-lemon-400');
+          button.classList.remove('border-gray-200', 'dark:border-gray-700');
+          
+          // Update scaling
+          updateScaling(servings);
+        }
       });
     });
     
-    // Imperial toggle (placeholder - would need full implementation)
-    document.getElementById('imperial-toggle').addEventListener('change', (e) => {
-      // This would convert all weights to imperial units
-      console.log('Imperial mode:', e.target.checked);
-    });
+    // Imperial toggle
+    const imperialToggle = document.getElementById('imperial-toggle');
+    if (imperialToggle) {
+      imperialToggle.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target) {
+          console.log('Imperial mode:', target.checked);
+          // This would convert all weights to imperial units
+        }
+      });
+    }
   });
 </script> 
