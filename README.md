@@ -1,15 +1,19 @@
-# Lemon Calories Landing Page
+# Lemon Macros Landing Page
 
-A focused landing page for `calories.lemonnutrition.eu` - AI-powered recipe nutrition analysis tool.
+A focused landing page for `macros.lemonnutrition.eu` - AI-powered recipe nutrition analysis tool.
 
-## 🚀 Tech Stack
+## 🎯 **Overview**
 
-- **Framework**: Astro 5.x (Static Site Generation)
-- **Styling**: TailwindCSS 4.x with Lemon brand colors
-- **Deployment**: GitHub Actions → GitHub Pages  
-- **Domain**: calories.lemonnutrition.eu
+Simple, elegant landing page showcasing Lemon Macros - paste any recipe and instantly get macronutrients and calorie content with AI-powered analysis.
 
-## 📁 Project Structure
+### **Features**
+- **Domain**: macros.lemonnutrition.eu
+- **Tech Stack**: Astro + Tailwind CSS
+- **Deployment**: GitHub Pages with custom domain
+- **Performance**: Optimized static site generation
+- **Design**: Clean, conversion-focused UI
+
+## 📁 **Project Structure**
 
 ```
 ├── .github/workflows/deploy.yml    # Automated deployment
@@ -33,21 +37,44 @@ A focused landing page for `calories.lemonnutrition.eu` - AI-powered recipe nutr
 └── package.json                   # Dependencies
 ```
 
-## 🛠️ Development
+## 🚀 **Development**
 
+### **Prerequisites**
+- Node.js 23+
+- npm 10+
+
+### **Setup**
 ```bash
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
+```
 
-# Build for production
+### **Build**
+```bash
 npm run build
-
-# Preview production build
 npm run preview
 ```
+
+## 📦 **Deployment**
+
+Automatically deploys to `macros.lemonnutrition.eu` via GitHub Actions on push to `main` branch.
+
+### **Manual Deploy**
+```bash
+npm run build
+# Upload dist/ to hosting provider
+```
+
+## 🎨 **Design System**
+
+- **Primary Colors**: Lemon brand palette
+- **Typography**: Clean, readable fonts
+- **Layout**: Mobile-first responsive design
+- **Components**: Reusable Astro components
+
+## 📄 **License**
+
+MIT License - see LICENSE file for details.
 
 ## 🎨 Brand Colors
 
@@ -64,7 +91,7 @@ npm run preview
 
 ## 🚀 Deployment
 
-Automatically deploys to `calories.lemonnutrition.eu` via GitHub Actions on push to `main` branch.
+Automatically deploys to `macros.lemonnutrition.eu` via GitHub Actions on push to `main` branch.
 
 ## 📝 Content Strategy
 

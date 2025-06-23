@@ -4,7 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import path from 'path';
 
 export default defineConfig({
-  site: 'https://calories.lemonnutrition.eu',
+  site: 'https://macros.lemonnutrition.eu',
   base: '/',
   output: 'static',
   outDir: './dist',
@@ -35,7 +35,7 @@ export default defineConfig({
   compressHTML: true,
   
   image: {
-    domains: ['calories.lemonnutrition.eu'],
+    domains: ['macros.lemonnutrition.eu'],
     remotePatterns: [{ protocol: 'https' }]
   }
 }); 
