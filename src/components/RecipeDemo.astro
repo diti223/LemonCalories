@@ -1,142 +1,642 @@
 ---
-// Component: RecipeDemo.astro
-// Purpose: Show before/after example of recipe nutrition analysis
+// Component: Enhanced RecipeDemo.astro
+// Purpose: Interactive demo showing AI recipe parsing with smart scaling
 ---
 
-<section class="py-20 bg-gray-50 dark:bg-gray-800">
+<section class="py-20 bg-gradient-to-br from-gray-50 to-lemon-50 dark:from-gray-900 dark:to-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-16">
       <h2 class="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-        See the Magic in Action
+        Watch Recipe Magic Happen
       </h2>
       <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        From messy recipe instructions to precise nutrition data in seconds. 
-        Our AI understands natural language and estimates portions automatically.
+        From natural language to professional nutrition analysis. 
+        See weight-based calculations, smart scaling, and intelligent rounding in action.
       </p>
     </div>
     
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <!-- Before: Recipe Input -->
-      <div class="space-y-6">
-        <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl">
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-              <span class="text-red-600 dark:text-red-400 font-bold">1</span>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-              Paste Your Recipe
-            </h3>
-          </div>
-          
-          <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 font-mono text-sm leading-relaxed">
-            <div class="text-gray-700 dark:text-gray-300 space-y-2">
-              <div>• 2 chicken breasts, grilled</div>
-              <div>• 1 tablespoon olive oil</div>
-              <div>• 100g cooked jasmine rice</div>
-              <div>• half an avocado, sliced</div>
-              <div>• some lemon juice and herbs</div>
-              <div>• handful of cherry tomatoes</div>
-              <div class="opacity-60">• salt and pepper to taste</div>
-            </div>
-            
-            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <p class="text-xs text-gray-500 dark:text-gray-400 italic">
-                Serves 2 people as written above
-              </p>
-            </div>
-          </div>
+    <div class="max-w-5xl mx-auto">
+      <!-- Recipe Input with Typewriter Effect -->
+      <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden mb-8">
+        <div class="bg-gradient-to-r from-lemon-500 to-orange-500 px-8 py-6">
+          <h3 class="text-xl font-semibold text-white mb-2">Natural Language Recipe</h3>
+          <p class="text-lemon-100">Just paste any recipe - we'll handle the rest</p>
         </div>
         
-        <div class="text-center">
-          <div class="inline-flex items-center gap-2 text-lemon-600 dark:text-lemon-400 font-medium">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-            <span>AI Processing...</span>
+        <div class="p-8">
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 font-mono text-sm leading-relaxed min-h-[200px] relative">
+            <div id="typewriter-text" class="text-gray-700 dark:text-gray-300"></div>
+            <div id="typewriter-cursor" class="inline-block w-2 h-5 bg-lemon-500 ml-1 animate-pulse"></div>
+            
+            <!-- AI Processing Animation (hidden initially) -->
+            <div id="ai-processing" class="absolute inset-0 bg-gray-50 dark:bg-gray-800 rounded-xl flex items-center justify-center hidden">
+              <div class="text-center">
+                <div class="inline-flex items-center gap-3 text-lemon-600 dark:text-lemon-400 text-lg font-medium">
+                  <div class="w-3 h-3 bg-lemon-500 rounded-full animate-bounce"></div>
+                  <div class="w-3 h-3 bg-lemon-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                  <div class="w-3 h-3 bg-lemon-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                  <span>AI Parsing</span>
+                  <span id="processing-dots">...</span>
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Analyzing ingredients and calculating nutrition</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       
-      <!-- After: Nutrition Results -->
-      <div class="space-y-6">
-        <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl">
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-              <span class="text-green-600 dark:text-green-400 font-bold">2</span>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-              Get Instant Nutrition
-            </h3>
-          </div>
-          
-          <div class="space-y-4">
-            <!-- Calories - Main Focus -->
-            <div class="bg-lemon-50 dark:bg-lemon-900/20 rounded-xl p-4">
-              <div class="flex justify-between items-center">
-                <span class="text-lg font-medium text-gray-900 dark:text-white">Total Calories</span>
-                <span class="text-3xl font-bold text-lemon-600 dark:text-lemon-400">720</span>
-              </div>
-              <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                Per serving (360 cal each)
-              </div>
-            </div>
+      <!-- Results Section with Tabs -->
+      <div id="results-section" class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden opacity-0 transform translate-y-8 transition-all duration-1000">
+        <!-- Tab Navigation -->
+        <div class="border-b border-gray-200 dark:border-gray-700">
+          <div class="flex flex-wrap">
+            <button class="tab-btn active flex-1 px-6 py-4 text-center font-medium border-b-2 border-lemon-500 text-lemon-600 dark:text-lemon-400" data-tab="ingredients">
+              📋 Ingredients
+            </button>
+            <button class="tab-btn flex-1 px-6 py-4 text-center font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300" data-tab="instructions">
+              📖 Instructions
+            </button>
+            <button class="tab-btn flex-1 px-6 py-4 text-center font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300" data-tab="nutrition">
+              📊 Nutrition
+            </button>
+            <button class="tab-btn flex-1 px-6 py-4 text-center font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300" data-tab="scaling">
+              ⚖️ Scale
+            </button>
             
-            <!-- Macronutrients -->
-            <div class="grid grid-cols-3 gap-4">
-              <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">55g</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Protein</div>
-                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">31%</div>
-              </div>
-              <div class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
-                <div class="text-2xl font-bold text-green-600 dark:text-green-400">30g</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Carbs</div>
-                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">17%</div>
-              </div>
-              <div class="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
-                <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">40g</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Fat</div>
-                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">52%</div>
-              </div>
-            </div>
-            
-            <!-- Additional Insights -->
-            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
-              <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span>High protein, balanced meal</span>
-              </div>
-              <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-1">
-                <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                </svg>
-                <span>Estimated fiber: 8g • Sodium: 420mg</span>
-              </div>
+            <!-- Unit Toggle -->
+            <div class="px-6 py-4 flex items-center gap-2">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="imperial-toggle" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-lemon-300 dark:peer-focus:ring-lemon-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-lemon-600"></div>
+                <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">Imperial</span>
+              </label>
             </div>
           </div>
         </div>
         
-        <div class="text-center">
-          <div class="inline-flex items-center gap-2 text-green-600 dark:text-green-400 font-medium">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-            </svg>
-            <span>Analysis Complete!</span>
+        <!-- Tab Content -->
+        <div class="p-8">
+          <!-- Ingredients Tab -->
+          <div id="ingredients-tab" class="tab-content">
+            <div class="space-y-4">
+              <div class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                *Calories calculated: (protein × 4.1) + (carbs × 4.1) + (fat × 8.84)
+              </div>
+              
+              <div class="ingredient-row border-b border-gray-100 dark:border-gray-800 pb-4" data-ingredient="chicken-breast">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      <span class="quantity">2</span> large chicken breasts 
+                      <span class="weight text-gray-500 dark:text-gray-400">(400g / 0.88 lbs)</span>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-semibold text-gray-900 dark:text-white">
+                      <span class="calories">620</span> cal
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                      <span class="protein">116</span>g protein, <span class="carbs">0</span>g carbs, <span class="fat">14</span>g fat
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ingredient-row border-b border-gray-100 dark:border-gray-800 pb-4" data-ingredient="mixed-greens">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      <span class="quantity">4</span> cups mixed greens 
+                      <span class="weight text-gray-500 dark:text-gray-400">(120g / 4.2 oz)</span>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-semibold text-gray-900 dark:text-white">
+                      <span class="calories">24</span> cal
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                      <span class="protein">2.4</span>g protein, <span class="carbs">4.8</span>g carbs, <span class="fat">0.4</span>g fat
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ingredient-row border-b border-gray-100 dark:border-gray-800 pb-4" data-ingredient="cucumber">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      <span class="quantity">1/2</span> cucumber diced 
+                      <span class="weight text-gray-500 dark:text-gray-400">(150g / 5.3 oz)</span>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-semibold text-gray-900 dark:text-white">
+                      <span class="calories">16</span> cal
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                      <span class="protein">1.0</span>g protein, <span class="carbs">3.9</span>g carbs, <span class="fat">0.2</span>g fat
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ingredient-row border-b border-gray-100 dark:border-gray-800 pb-4" data-ingredient="tomato">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      <span class="quantity">1</span> medium tomato chopped 
+                      <span class="weight text-gray-500 dark:text-gray-400">(180g / 6.3 oz)</span>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-semibold text-gray-900 dark:text-white">
+                      <span class="calories">32</span> cal
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                      <span class="protein">1.6</span>g protein, <span class="carbs">7.0</span>g carbs, <span class="fat">0.4</span>g fat
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ingredient-row border-b border-gray-100 dark:border-gray-800 pb-4" data-ingredient="red-onion">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      <span class="quantity">1/4</span> red onion sliced 
+                      <span class="weight text-gray-500 dark:text-gray-400">(40g / 1.4 oz)</span>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-semibold text-gray-900 dark:text-white">
+                      <span class="calories">16</span> cal
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                      <span class="protein">0.4</span>g protein, <span class="carbs">3.7</span>g carbs, <span class="fat">0.0</span>g fat
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ingredient-row border-b border-gray-100 dark:border-gray-800 pb-4" data-ingredient="olive-oil">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      <span class="quantity">2</span> tbsp olive oil 
+                      <span class="weight text-gray-500 dark:text-gray-400">(30ml / 1.0 fl oz)</span>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-semibold text-gray-900 dark:text-white">
+                      <span class="calories">270</span> cal
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                      <span class="protein">0.0</span>g protein, <span class="carbs">0.0</span>g carbs, <span class="fat">30.0</span>g fat
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ingredient-row" data-ingredient="lemon-juice">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      <span class="quantity">1</span> lemon juice squeeze 
+                      <span class="weight text-gray-500 dark:text-gray-400">(15ml / 0.5 fl oz)</span>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-semibold text-gray-900 dark:text-white">
+                      <span class="calories">4</span> cal
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                      <span class="protein">0.1</span>g protein, <span class="carbs">1.3</span>g carbs, <span class="fat">0.0</span>g fat
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Instructions Tab -->
+          <div id="instructions-tab" class="tab-content hidden">
+            <div class="space-y-4">
+              <ol class="space-y-3 text-gray-700 dark:text-gray-300">
+                <li class="flex gap-4">
+                  <span class="flex-shrink-0 w-6 h-6 bg-lemon-500 text-white rounded-full flex items-center justify-center text-sm font-medium">1</span>
+                  <span>Season 2 chicken breasts with salt and pepper</span>
+                </li>
+                <li class="flex gap-4">
+                  <span class="flex-shrink-0 w-6 h-6 bg-lemon-500 text-white rounded-full flex items-center justify-center text-sm font-medium">2</span>
+                  <span>Grill chicken breasts until internal temp reaches 165°F (7-8 minutes per side)</span>
+                </li>
+                <li class="flex gap-4">
+                  <span class="flex-shrink-0 w-6 h-6 bg-lemon-500 text-white rounded-full flex items-center justify-center text-sm font-medium">3</span>
+                  <span>Let chicken rest for 5 minutes, then slice</span>
+                </li>
+                <li class="flex gap-4">
+                  <span class="flex-shrink-0 w-6 h-6 bg-lemon-500 text-white rounded-full flex items-center justify-center text-sm font-medium">4</span>
+                  <span>Dice 1/2 cucumber and chop 1 medium tomato</span>
+                </li>
+                <li class="flex gap-4">
+                  <span class="flex-shrink-0 w-6 h-6 bg-lemon-500 text-white rounded-full flex items-center justify-center text-sm font-medium">5</span>
+                  <span>Slice 1/4 red onion thinly</span>
+                </li>
+                <li class="flex gap-4">
+                  <span class="flex-shrink-0 w-6 h-6 bg-lemon-500 text-white rounded-full flex items-center justify-center text-sm font-medium">6</span>
+                  <span>Combine greens, cucumber, tomato, and onion in large bowl</span>
+                </li>
+                <li class="flex gap-4">
+                  <span class="flex-shrink-0 w-6 h-6 bg-lemon-500 text-white rounded-full flex items-center justify-center text-sm font-medium">7</span>
+                  <span>Top with sliced chicken</span>
+                </li>
+                <li class="flex gap-4">
+                  <span class="flex-shrink-0 w-6 h-6 bg-lemon-500 text-white rounded-full flex items-center justify-center text-sm font-medium">8</span>
+                  <span>Drizzle with olive oil and lemon juice before serving</span>
+                </li>
+              </ol>
+              
+              <div class="bg-gradient-to-r from-lemon-50 to-orange-50 dark:from-lemon-900/20 dark:to-orange-900/20 rounded-xl p-6 mt-8">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-8 h-8 bg-gradient-to-r from-lemon-500 to-orange-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <h4 class="font-semibold text-gray-900 dark:text-white">🔒 Unlock Premium Instructions</h4>
+                </div>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">
+                  Get detailed cooking tips, timing guidance, and dietary adaptations with our premium features.
+                </p>
+                <button class="mt-4 text-lemon-600 dark:text-lemon-400 font-medium text-sm hover:text-lemon-700 dark:hover:text-lemon-300">
+                  Learn More →
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Nutrition Tab -->
+          <div id="nutrition-tab" class="tab-content hidden">
+            <div class="grid md:grid-cols-2 gap-8">
+              <div>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Total Recipe</h4>
+                <div class="space-y-4">
+                  <div class="bg-lemon-50 dark:bg-lemon-900/20 rounded-xl p-4">
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium text-gray-900 dark:text-white">Calories</span>
+                      <span class="text-2xl font-bold text-lemon-600 dark:text-lemon-400" id="total-calories">982</span>
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Calculated: (121.4g × 4.1) + (20.2g × 4.1) + (42.6g × 8.84)
+                    </div>
+                  </div>
+                  
+                  <div class="grid grid-cols-3 gap-4">
+                    <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+                      <div class="text-xl font-bold text-blue-600 dark:text-blue-400" id="total-protein">121.4g</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">Protein</div>
+                    </div>
+                    <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                      <div class="text-xl font-bold text-green-600 dark:text-green-400" id="total-carbs">20.2g</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">Carbs</div>
+                    </div>
+                    <div class="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
+                      <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="total-fat">42.6g</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">Fat</div>
+                    </div>
+                  </div>
+                  
+                  <div class="text-sm text-gray-500 dark:text-gray-400">
+                    Total weight: <span id="total-weight">982g (2.16 lbs)</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Per Serving (1 of 2)</h4>
+                <div class="space-y-4">
+                  <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium text-gray-900 dark:text-white">Calories</span>
+                      <span class="text-2xl font-bold text-green-600 dark:text-green-400" id="serving-calories">491</span>
+                    </div>
+                  </div>
+                  
+                  <div class="grid grid-cols-3 gap-4">
+                    <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+                      <div class="text-xl font-bold text-blue-600 dark:text-blue-400" id="serving-protein">60.7g</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">Protein</div>
+                    </div>
+                    <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                      <div class="text-xl font-bold text-green-600 dark:text-green-400" id="serving-carbs">10.1g</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">Carbs</div>
+                    </div>
+                    <div class="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
+                      <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="serving-fat">21.3g</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">Fat</div>
+                    </div>
+                  </div>
+                  
+                  <div class="text-sm text-gray-500 dark:text-gray-400">
+                    Serving weight: <span id="serving-weight">491g (1.08 lbs)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 text-xs text-gray-500 dark:text-gray-400 italic">
+              Ultra-precise: Weight-based macro calculations from nutrition database (per 100g)
+            </div>
+          </div>
+          
+          <!-- Scaling Tab -->
+          <div id="scaling-tab" class="tab-content hidden">
+            <div class="space-y-6">
+              <div>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Smart Scaling Calculator</h4>
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <button class="serving-btn px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-lemon-500 dark:hover:border-lemon-400" data-servings="1">1 serving</button>
+                  <button class="serving-btn px-4 py-2 rounded-lg border-2 border-lemon-500 bg-lemon-50 dark:bg-lemon-900/20 text-lemon-600 dark:text-lemon-400" data-servings="2">2 servings</button>
+                  <button class="serving-btn px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-lemon-500 dark:hover:border-lemon-400" data-servings="3">3 servings</button>
+                  <button class="serving-btn px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-lemon-500 dark:hover:border-lemon-400" data-servings="4">4 servings</button>
+                  <button class="serving-btn px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-lemon-500 dark:hover:border-lemon-400" data-servings="6">6 servings</button>
+                  <button class="serving-btn px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-lemon-500 dark:hover:border-lemon-400" data-servings="8">8 servings</button>
+                </div>
+                
+                <div class="bg-lemon-50 dark:bg-lemon-900/20 rounded-xl p-4 mb-6">
+                  <div class="text-center">
+                    <div class="text-lg font-medium text-gray-900 dark:text-white">
+                      Scaling by <span id="scale-factor" class="text-lemon-600 dark:text-lemon-400 font-bold">1.0x</span>
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      Total: <span id="scaled-total-calories">982</span> cal | Per serving: <span id="scaled-serving-calories">491</span> cal
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="space-y-3" id="scaled-ingredients">
+                <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <span class="font-medium text-gray-900 dark:text-white">
+                    <span class="scaled-quantity">2</span> chicken breasts 
+                    <span class="text-gray-500 dark:text-gray-400 text-sm">(400g)</span>
+                  </span>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">Whole items → integers</span>
+                </div>
+                
+                <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <span class="font-medium text-gray-900 dark:text-white">
+                    <span class="scaled-quantity">4</span> cups mixed greens 
+                    <span class="text-gray-500 dark:text-gray-400 text-sm">(120g)</span>
+                  </span>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">Even cups</span>
+                </div>
+                
+                <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <span class="font-medium text-gray-900 dark:text-white">
+                    <span class="scaled-quantity">1/2</span> cucumber 
+                    <span class="text-gray-500 dark:text-gray-400 text-sm">(150g)</span>
+                  </span>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">Smart fractions</span>
+                </div>
+                
+                <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <span class="font-medium text-gray-900 dark:text-white">
+                    <span class="scaled-quantity">2</span> tbsp olive oil 
+                    <span class="text-gray-500 dark:text-gray-400 text-sm">(30ml)</span>
+                  </span>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">Measurable units</span>
+                </div>
+              </div>
+              
+              <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 mt-6">
+                <div class="flex items-center gap-3 mb-2">
+                  <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                  </svg>
+                  <h5 class="font-medium text-blue-900 dark:text-blue-100">Smart Rounding Applied</h5>
+                </div>
+                <p class="text-blue-800 dark:text-blue-200 text-sm">
+                  Our system intelligently rounds quantities to practical cooking measurements. 
+                  No more 1.75 eggs or 23.7g of flour!
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Call to Action -->
-    <div class="text-center mt-16">
-      <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
-        Ready to analyze your own recipes?
-      </p>
-      <button class="bg-lemon-500 hover:bg-lemon-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
-        Try the Demo Recipe
-      </button>
+      
+      <!-- Call to Action -->
+      <div class="text-center mt-12">
+        <div class="inline-flex items-center gap-2 text-green-600 dark:text-green-400 font-medium mb-4">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Professional-grade analysis complete!</span>
+        </div>
+        <div>
+          <button class="bg-gradient-to-r from-lemon-500 to-orange-500 hover:from-lemon-600 hover:to-orange-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+            Try Your Own Recipe
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-</section> 
+</section>
+
+<script>
+  // Recipe text for typewriter effect
+  const recipeText = `Grilled Chicken Salad for Two
+
+Take 2 large chicken breasts and grill them with a pinch of salt and pepper. 
+Mix with 4 cups of mixed greens, half a cucumber diced, 1 medium tomato chopped, 
+and quarter of a red onion sliced thin. Drizzle with 2 tablespoons of olive oil 
+and a squeeze of lemon juice. Serves 2 people.`;
+
+  // Ingredient data for scaling calculations
+  const ingredients = {
+    'chicken-breast': { baseQuantity: 2, baseWeight: 400, unit: 'whole', type: 'protein' },
+    'mixed-greens': { baseQuantity: 4, baseWeight: 120, unit: 'cups', type: 'vegetable' },
+    'cucumber': { baseQuantity: 0.5, baseWeight: 150, unit: 'whole', type: 'vegetable' },
+    'tomato': { baseQuantity: 1, baseWeight: 180, unit: 'medium', type: 'vegetable' },
+    'red-onion': { baseQuantity: 0.25, baseWeight: 40, unit: 'whole', type: 'vegetable' },
+    'olive-oil': { baseQuantity: 2, baseWeight: 28, unit: 'tbsp', type: 'fat' },
+    'lemon-juice': { baseQuantity: 1, baseWeight: 15, unit: 'squeeze', type: 'acid' }
+  };
+
+  class TypewriterEffect {
+    constructor(element, text, speed = 50) {
+      this.element = element;
+      this.text = text;
+      this.speed = speed;
+      this.currentIndex = 0;
+    }
+    
+    async start() {
+      for (let i = 0; i < this.text.length; i++) {
+        this.element.textContent += this.text[i];
+        await this.delay(this.speed);
+      }
+      this.onComplete?.();
+    }
+    
+    delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+  }
+
+  function animateCounter(element, start, end, duration = 1000) {
+    const range = end - start;
+    const increment = range / (duration / 16);
+    let current = start;
+    
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= end) {
+        element.textContent = Math.round(end);
+        clearInterval(timer);
+      } else {
+        element.textContent = Math.round(current);
+      }
+    }, 16);
+  }
+
+  function smartRound(value, unit, type) {
+    if (type === 'protein' || unit === 'whole') {
+      return Math.round(value);
+    }
+    
+    if (value < 1) {
+      return Math.round(value * 8) / 8; // 1/8 increments
+    } else if (value < 10) {
+      return Math.round(value * 4) / 4; // 1/4 increments
+    } else {
+      return Math.round(value);
+    }
+  }
+
+  function updateScaling(servings) {
+    const scaleFactor = servings / 2; // Base recipe is for 2 servings
+    
+    document.getElementById('scale-factor').textContent = `${scaleFactor}x`;
+    
+    // Update scaled ingredients display
+    const scaledIngredientsContainer = document.getElementById('scaled-ingredients');
+    scaledIngredientsContainer.innerHTML = '';
+    
+    const displayIngredients = [
+      { name: 'chicken breasts', key: 'chicken-breast', note: 'Whole items → integers' },
+      { name: 'cups mixed greens', key: 'mixed-greens', note: 'Even cups' },
+      { name: 'cucumber', key: 'cucumber', note: 'Smart fractions' },
+      { name: 'tbsp olive oil', key: 'olive-oil', note: 'Measurable units' }
+    ];
+    
+    displayIngredients.forEach(ingredient => {
+      const data = ingredients[ingredient.key];
+      const scaledQuantity = smartRound(data.baseQuantity * scaleFactor, data.unit, data.type);
+      const scaledWeight = Math.round(data.baseWeight * scaleFactor);
+      
+      const div = document.createElement('div');
+      div.className = 'flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg';
+      div.innerHTML = `
+        <span class="font-medium text-gray-900 dark:text-white">
+          <span class="scaled-quantity">${scaledQuantity}</span> ${ingredient.name}
+          <span class="text-gray-500 dark:text-gray-400 text-sm">(${scaledWeight}g)</span>
+        </span>
+        <span class="text-sm text-gray-600 dark:text-gray-400">${ingredient.note}</span>
+      `;
+      scaledIngredientsContainer.appendChild(div);
+    });
+    
+    // Update totals
+    const totalCalories = Math.round(982 * scaleFactor);
+    const servingCalories = Math.round(totalCalories / servings);
+    
+    document.getElementById('scaled-total-calories').textContent = totalCalories;
+    document.getElementById('scaled-serving-calories').textContent = servingCalories;
+  }
+
+  // Initialize the demo when page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    // Start typewriter effect
+    const typewriterElement = document.getElementById('typewriter-text');
+    const typewriter = new TypewriterEffect(typewriterElement, recipeText, 30);
+    
+    typewriter.onComplete = () => {
+      // Hide cursor and show processing
+      document.getElementById('typewriter-cursor').style.display = 'none';
+      document.getElementById('ai-processing').classList.remove('hidden');
+      
+      // Animate processing dots
+      let dotCount = 0;
+      const dotsElement = document.getElementById('processing-dots');
+      const dotsInterval = setInterval(() => {
+        dotsElement.textContent = '.'.repeat((dotCount % 3) + 1);
+        dotCount++;
+      }, 500);
+      
+      // Show results after processing
+      setTimeout(() => {
+        clearInterval(dotsInterval);
+        document.getElementById('ai-processing').classList.add('hidden');
+        
+        const resultsSection = document.getElementById('results-section');
+        resultsSection.classList.remove('opacity-0', 'translate-y-8');
+        
+        // Animate macro counters
+        setTimeout(() => {
+          animateCounter(document.querySelector('#total-calories'), 0, 982, 1500);
+          animateCounter(document.querySelector('#serving-calories'), 0, 491, 1500);
+        }, 500);
+      }, 3000);
+    };
+    
+    // Start the typewriter effect
+    setTimeout(() => typewriter.start(), 1000);
+    
+    // Tab functionality
+    document.querySelectorAll('.tab-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.dataset.tab;
+        
+        // Update active tab button
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.classList.remove('active', 'border-lemon-500', 'text-lemon-600', 'dark:text-lemon-400');
+          btn.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+        });
+        button.classList.add('active', 'border-lemon-500', 'text-lemon-600', 'dark:text-lemon-400');
+        button.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+        
+        // Show target tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.add('hidden');
+        });
+        document.getElementById(`${targetTab}-tab`).classList.remove('hidden');
+      });
+    });
+    
+    // Serving size buttons
+    document.querySelectorAll('.serving-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const servings = parseInt(button.dataset.servings);
+        
+        // Update active button
+        document.querySelectorAll('.serving-btn').forEach(btn => {
+          btn.classList.remove('border-lemon-500', 'bg-lemon-50', 'dark:bg-lemon-900/20', 'text-lemon-600', 'dark:text-lemon-400');
+          btn.classList.add('border-gray-200', 'dark:border-gray-700');
+        });
+        button.classList.add('border-lemon-500', 'bg-lemon-50', 'dark:bg-lemon-900/20', 'text-lemon-600', 'dark:text-lemon-400');
+        button.classList.remove('border-gray-200', 'dark:border-gray-700');
+        
+        // Update scaling
+        updateScaling(servings);
+      });
+    });
+    
+    // Imperial toggle (placeholder - would need full implementation)
+    document.getElementById('imperial-toggle').addEventListener('change', (e) => {
+      // This would convert all weights to imperial units
+      console.log('Imperial mode:', e.target.checked);
+    });
+  });
+</script> 
