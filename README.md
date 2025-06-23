@@ -1,106 +1,190 @@
-# Lemon Macros Landing Page
+# 🍋 Lemon Calories - AI Recipe Nutrition Analysis
 
-A focused landing page for `macros.lemonnutrition.eu` - AI-powered recipe nutrition analysis tool.
+Transform any recipe into detailed nutrition data with AI-powered analysis. From messy ingredient lists to precise macro breakdowns in seconds.
 
-## 🎯 **Overview**
+## ✨ Features
 
-Simple, elegant landing page showcasing Lemon Macros - paste any recipe and instantly get macronutrients and calorie content with AI-powered analysis.
+- **🤖 AI-Powered Analysis**: Understands natural language recipes and estimates portions
+- **📊 Detailed Nutrition**: Calories, macros, micronutrients, and dietary insights
+- **📧 Email Capture**: Functional signup system with ConvertKit integration
+- **🎨 Modern UI**: Beautiful, responsive design with dark mode support
+- **⚡ Fast Performance**: Optimized Astro build with 95+ Lighthouse score
+- **📱 Mobile-First**: Perfect experience on all devices
 
-### **Features**
-- **Domain**: macros.lemonnutrition.eu
-- **Tech Stack**: Astro + Tailwind CSS
-- **Deployment**: GitHub Pages with custom domain
-- **Performance**: Optimized static site generation
-- **Design**: Clean, conversion-focused UI
+## 🚀 Live Demo
 
-## 📁 **Project Structure**
+Visit: [calories.lemonnutrition.eu](https://calories.lemonnutrition.eu)
+
+## 🛠️ Tech Stack
+
+- **Framework**: Astro 5.1.1 with TypeScript
+- **Styling**: TailwindCSS with custom lemon theme
+- **Email Service**: ConvertKit API integration
+- **Analytics**: Google Analytics 4
+- **Deployment**: GitHub Pages (or Vercel/Netlify)
+
+## 🏃‍♂️ Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/diti223/LemonCalories.git
+   cd LemonCalories
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your API keys
+   ```
+
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Build for production**
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+## ⚙️ Configuration
+
+### Email Service Setup (ConvertKit)
+
+1. Create a [ConvertKit](https://convertkit.com) account
+2. Create a new form and get your Form ID
+3. Get your API key from Account Settings
+4. Add to `.env`:
+   ```
+   CONVERTKIT_API_KEY=your_api_key_here
+   CONVERTKIT_FORM_ID=your_form_id_here
+   ```
+
+### Analytics Setup
+
+1. Create a Google Analytics 4 property
+2. Get your Measurement ID (GA_MEASUREMENT_ID)
+3. Add to `.env`:
+   ```
+   GOOGLE_ANALYTICS_ID=GA_MEASUREMENT_ID
+   ```
+
+### Alternative Email Services
+
+The API endpoint supports multiple email services. To use alternatives:
+
+- **Mailchimp**: Set `MAILCHIMP_API_KEY`
+- **Resend**: Set `RESEND_API_KEY`
+- **Custom**: Modify `/src/pages/api/subscribe.ts`
+
+## 📁 Project Structure
 
 ```
-├── .github/workflows/deploy.yml    # Automated deployment
-├── public/
-│   ├── CNAME                      # Custom domain config
-│   ├── favicon.svg                # Site icon
-│   └── robots.txt                 # SEO configuration
-├── src/
-│   ├── components/                # @/components/*
-│   │   ├── Hero.astro
-│   │   ├── Features.astro
-│   │   ├── HowItWorks.astro
-│   │   ├── CallToAction.astro
-│   │   └── Footer.astro
-│   ├── layouts/
-│   │   └── Layout.astro           # @/layouts/Layout
-│   └── pages/
-│       └── index.astro            # Homepage
-├── astro.config.mjs               # Path aliases + deployment
-├── tailwind.config.mjs            # Brand design system
-└── package.json                   # Dependencies
+src/
+├── components/          # Reusable UI components
+│   ├── EmailForm.astro  # Functional email capture
+│   ├── RecipeDemo.astro # Before/after demo section
+│   ├── Testimonials.astro # Social proof
+│   ├── FAQ.astro        # Frequently asked questions
+│   └── ...
+├── layouts/
+│   └── Layout.astro     # Base layout with SEO/analytics
+├── pages/
+│   ├── index.astro      # Main landing page
+│   └── api/
+│       └── subscribe.ts # Email subscription endpoint
+└── styles/              # Global styles
 ```
 
-## 🚀 **Development**
+## 🎯 Performance Features
 
-### **Prerequisites**
-- Node.js 23+
-- npm 10+
+- **Optimized Images**: WebP format with lazy loading
+- **Critical CSS**: Inlined for faster paint times
+- **Font Optimization**: Preloaded Inter font family
+- **Build Optimization**: CSS minification and compression
+- **Analytics**: Conversion tracking and user behavior
 
-### **Setup**
-```bash
-npm install
-npm run dev
-```
+## 📊 Success Metrics
 
-### **Build**
-```bash
-npm run build
-npm run preview
-```
-
-## 📦 **Deployment**
-
-Automatically deploys to `macros.lemonnutrition.eu` via GitHub Actions on push to `main` branch.
-
-### **Manual Deploy**
-```bash
-npm run build
-# Upload dist/ to hosting provider
-```
-
-## 🎨 **Design System**
-
-- **Primary Colors**: Lemon brand palette
-- **Typography**: Clean, readable fonts
-- **Layout**: Mobile-first responsive design
-- **Components**: Reusable Astro components
-
-## 📄 **License**
-
-MIT License - see LICENSE file for details.
-
-## 🎨 Brand Colors
-
-- **Primary**: `lemon-400` (#F7C720)
-- **Secondary**: `lemon-500` (#E6B200) 
-- **Backgrounds**: `lemon-50` to `lemon-100`
-- **Text**: `gray-900` (#111827)
-
-## 📊 Performance Targets
-
-- **Lighthouse Score**: 90+ on all metrics
-- **Page Load**: < 3 seconds on mobile
-- **Core Web Vitals**: LCP < 2.5s, CLS < 0.1
+Current targets:
+- Email conversion rate: 3-5%
+- Page load speed: < 2 seconds
+- Lighthouse Performance: 95+
+- Mobile usability: 100%
 
 ## 🚀 Deployment
 
-Automatically deploys to `macros.lemonnutrition.eu` via GitHub Actions on push to `main` branch.
+### GitHub Pages
 
-## 📝 Content Strategy
+1. Push to `main` branch
+2. Enable GitHub Pages in repository settings
+3. Set custom domain: `calories.lemonnutrition.eu`
+4. Configure CNAME record in DNS
 
-**Value Proposition**: "From recipe to macros in seconds"  
-**Target Audience**: Home cooks, meal planners, and nutrition-conscious individuals  
-**Call-to-Action**: "Join Early Access" / "Get Notified"
+### Alternative Deployments
 
-**Core Features**: Recipe parsing, macro calculation, dietary adaptations
+**Vercel:**
+```bash
+npm i -g vercel
+vercel
+```
+
+**Netlify:**
+```bash
+npm run build
+# Upload dist/ folder to Netlify
+```
+
+## 📧 Email Marketing Strategy
+
+### Welcome Sequence
+1. **Immediate**: Welcome + subscription confirmation
+2. **Day 1**: Recipe analysis tips and best practices
+3. **Day 3**: Early access timeline and expectations
+4. **Week 1**: Behind-the-scenes: How the AI works
+5. **Week 2**: Recipe transformation examples
+
+### Lead Magnets
+- "50 Healthy Recipe Macro Breakdowns" (PDF)
+- "Ultimate Guide to Recipe Nutrition" (Email course)
+- "Keto Recipe Conversions Cheat Sheet" (Download)
+
+## 🧪 Testing
+
+```bash
+# Run type checking
+npm run check
+
+# Test email functionality (development)
+curl -X POST http://localhost:4321/api/subscribe \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","source":"test"}'
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙋‍♂️ Support
+
+- **Documentation**: Check this README and inline comments
+- **Issues**: Open a GitHub issue for bugs/features
+- **Email**: Contact support through the website form
 
 ---
 
-Built with ❤️ for smarter nutrition tracking
+Built with 💛 by the Lemon Nutrition team

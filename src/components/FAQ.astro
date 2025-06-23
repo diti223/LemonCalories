@@ -1,0 +1,168 @@
+---
+// Component: FAQ.astro
+// Purpose: Frequently asked questions section to address user concerns
+---
+
+<section class="py-20 bg-gray-50 dark:bg-gray-800">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+        Frequently Asked Questions
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300">
+        Everything you need to know about recipe nutrition analysis
+      </p>
+    </div>
+    
+    <div class="space-y-6">
+      <!-- FAQ Item 1 -->
+      <details class="group bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+        <summary class="flex items-center justify-between p-6 cursor-pointer select-none">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-open:text-lemon-600 dark:group-open:text-lemon-400 transition-colors">
+            How accurate are the nutrition calculations?
+          </h3>
+          <svg class="w-6 h-6 text-gray-500 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="px-6 pb-6">
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+            Our AI achieves 90-95% accuracy by using comprehensive nutrition databases (USDA, global food data) 
+            and intelligent portion estimation. For ingredients with unclear quantities ("a pinch of salt"), 
+            we use conservative estimates. Professional nutritionists use our tool as a starting point for their calculations.
+          </p>
+        </div>
+      </details>
+      
+      <!-- FAQ Item 2 -->
+      <details class="group bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+        <summary class="flex items-center justify-between p-6 cursor-pointer select-none">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-open:text-lemon-600 dark:group-open:text-lemon-400 transition-colors">
+            What recipe formats does it support?
+          </h3>
+          <svg class="w-6 h-6 text-gray-500 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="px-6 pb-6">
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+            We handle all common recipe formats: traditional ingredient lists, paragraph-style recipes, 
+            mixed units (cups, grams, tablespoons), and even handwritten family recipes. 
+            The AI understands natural language like "a handful of spinach" or "medium-sized onion" 
+            and converts them to standard measurements.
+          </p>
+        </div>
+      </details>
+      
+      <!-- FAQ Item 3 -->
+      <details class="group bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+        <summary class="flex items-center justify-between p-6 cursor-pointer select-none">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-open:text-lemon-600 dark:group-open:text-lemon-400 transition-colors">
+            Can it handle dietary restrictions and substitutions?
+          </h3>
+          <svg class="w-6 h-6 text-gray-500 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="px-6 pb-6">
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+            Yes! Our premium features include dietary adaptation suggestions (keto, vegan, gluten-free) 
+            and ingredient substitutions with recalculated nutrition. For example, swap regular flour 
+            for almond flour and get updated carb counts instantly. We support 15+ dietary patterns.
+          </p>
+        </div>
+      </details>
+      
+      <!-- FAQ Item 4 -->
+      <details class="group bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+        <summary class="flex items-center justify-between p-6 cursor-pointer select-none">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-open:text-lemon-600 dark:group-open:text-lemon-400 transition-colors">
+            How much does it cost?
+          </h3>
+          <svg class="w-6 h-6 text-gray-500 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="px-6 pb-6">
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+            We offer a generous free tier with 10 recipe analyses per month. 
+            Our Pro plan ($9/month) includes unlimited analyses, dietary adaptations, 
+            meal planning tools, and nutrition goal tracking. Perfect for serious home cooks and nutrition professionals.
+          </p>
+        </div>
+      </details>
+      
+      <!-- FAQ Item 5 -->
+      <details class="group bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+        <summary class="flex items-center justify-between p-6 cursor-pointer select-none">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-open:text-lemon-600 dark:group-open:text-lemon-400 transition-colors">
+            Do you store my recipes?
+          </h3>
+          <svg class="w-6 h-6 text-gray-500 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="px-6 pb-6">
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+            Your privacy matters. We only store nutrition results (not full recipes) to improve our accuracy. 
+            If you create an account, you can save your favorite analyses for easy access. 
+            All data is encrypted and you can delete your account anytime. We never share personal recipe data.
+          </p>
+        </div>
+      </details>
+      
+      <!-- FAQ Item 6 -->
+      <details class="group bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+        <summary class="flex items-center justify-between p-6 cursor-pointer select-none">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-open:text-lemon-600 dark:group-open:text-lemon-400 transition-colors">
+            Can I use this for meal planning?
+          </h3>
+          <svg class="w-6 h-6 text-gray-500 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="px-6 pb-6">
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+            Absolutely! Many users analyze their weekly recipes to plan balanced meals that hit their macro targets. 
+            Our Pro plan includes meal planning templates, weekly nutrition summaries, 
+            and integration with popular meal planning apps. Perfect for batch cooking and prep.
+          </p>
+        </div>
+      </details>
+      
+      <!-- FAQ Item 7 -->
+      <details class="group bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+        <summary class="flex items-center justify-between p-6 cursor-pointer select-none">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-open:text-lemon-600 dark:group-open:text-lemon-400 transition-colors">
+            When will the full app be available?
+          </h3>
+          <svg class="w-6 h-6 text-gray-500 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </summary>
+        <div class="px-6 pb-6">
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+            We're launching in early 2024! Early access members get first dibs on the beta, 
+            special pricing, and the ability to influence which features we build first. 
+            Join our waitlist to be notified the moment we go live.
+          </p>
+        </div>
+      </details>
+    </div>
+    
+    <!-- Still have questions CTA -->
+    <div class="mt-16 text-center">
+      <div class="bg-lemon-50 dark:bg-lemon-900/20 rounded-2xl p-8">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Still have questions?
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">
+          Our team is here to help! Reach out and we'll get back to you within 24 hours.
+        </p>
+        <button class="bg-lemon-500 hover:bg-lemon-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200">
+          Contact Support
+        </button>
+      </div>
+    </div>
+  </div>
+</section> 

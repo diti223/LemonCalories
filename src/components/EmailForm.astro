@@ -1,0 +1,189 @@
+---
+export interface Props {
+  source: 'hero' | 'footer' | 'demo';
+  variant?: 'primary' | 'secondary';
+  placeholder?: string;
+  buttonText?: string;
+}
+
+const { 
+  source, 
+  variant = 'primary', 
+  placeholder = "Enter your email address",
+  buttonText = "Get Early Access"
+} = Astro.props;
+
+const formId = `email-form-${source}`;
+---
+
+<div class="email-capture-wrapper">
+  <form 
+    id={formId}
+    class="email-capture-form"
+    data-source={source}
+  >
+    <div class="flex flex-col sm:flex-row gap-4">
+      <input 
+        type="email" 
+        name="email"
+        placeholder={placeholder}
+        class={`flex-1 px-6 py-4 rounded-xl border-0 shadow-lg focus:outline-none focus:ring-4 transition-all duration-200 ${
+          variant === 'primary' 
+            ? 'text-gray-900 dark:text-white dark:bg-gray-800 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-lemon-400/30' 
+            : 'text-gray-900 bg-white placeholder-gray-500 focus:ring-white/30'
+        }`}
+        required
+        disabled={false}
+      />
+      <button 
+        type="submit"
+        class={`font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
+          variant === 'primary'
+            ? 'bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900'
+            : 'bg-lemon-500 hover:bg-lemon-600 text-white'
+        }`}
+        disabled={false}
+      >
+        <span class="button-text">{buttonText}</span>
+        <span class="loading-spinner hidden">
+          <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+    
+    <div class="form-status mt-4 hidden">
+      <div class="success-message hidden text-green-600 dark:text-green-400 text-sm flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>🎉 Success! Check your email to confirm your subscription.</span>
+      </div>
+      <div class="error-message hidden text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        <span>Something went wrong. Please try again or contact support.</span>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const forms = document.querySelectorAll('.email-capture-form');
+  
+  forms.forEach(form => {
+    const formElement = form as HTMLFormElement;
+    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
+    const buttonText = submitButton.querySelector('.button-text') as HTMLSpanElement;
+    const loadingSpinner = submitButton.querySelector('.loading-spinner') as HTMLSpanElement;
+    const statusDiv = form.querySelector('.form-status') as HTMLDivElement;
+    const successDiv = statusDiv.querySelector('.success-message') as HTMLDivElement;
+    const errorDiv = statusDiv.querySelector('.error-message') as HTMLDivElement;
+    
+    formElement.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = emailInput.value.trim();
+      const source = formElement.dataset.source;
+      
+      if (!email || !isValidEmail(email)) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+      
+      // Set loading state
+      setLoadingState(true);
+      hideMessages();
+      
+      try {
+        // Track the attempt
+        if (typeof (window as any).gtag !== 'undefined') {
+          (window as any).gtag('event', 'email_signup_attempt', {
+            'event_category': 'conversion',
+            'event_label': source
+          });
+        }
+        
+        const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            source: source,
+            timestamp: new Date().toISOString()
+          })
+        });
+        
+        if (response.ok) {
+          showSuccess();
+          formElement.reset();
+          
+          // Track successful conversion
+          if (typeof (window as any).gtag !== 'undefined') {
+            (window as any).gtag('event', 'email_signup_success', {
+              'event_category': 'conversion',
+              'event_label': source,
+              'value': 1
+            });
+          }
+        } else {
+          throw new Error('Subscription failed');
+        }
+        
+      } catch (error) {
+        console.error('Subscription error:', error);
+        showError('Unable to subscribe right now. Please try again later.');
+        
+        // Track the error
+        if (typeof (window as any).gtag !== 'undefined') {
+          (window as any).gtag('event', 'email_signup_error', {
+            'event_category': 'conversion',
+            'event_label': source
+          });
+        }
+      } finally {
+        setLoadingState(false);
+      }
+    });
+    
+    function setLoadingState(loading: boolean) {
+      submitButton.disabled = loading;
+      emailInput.disabled = loading;
+      buttonText.classList.toggle('hidden', loading);
+      loadingSpinner.classList.toggle('hidden', !loading);
+    }
+    
+    function showSuccess() {
+      statusDiv.classList.remove('hidden');
+      successDiv.classList.remove('hidden');
+      errorDiv.classList.add('hidden');
+    }
+    
+    function showError(message: string) {
+      statusDiv.classList.remove('hidden');
+      errorDiv.classList.remove('hidden');
+      successDiv.classList.add('hidden');
+      const errorText = errorDiv.querySelector('span');
+      if (errorText) errorText.textContent = message;
+    }
+    
+    function hideMessages() {
+      statusDiv.classList.add('hidden');
+      successDiv.classList.add('hidden');
+      errorDiv.classList.add('hidden');
+    }
+    
+    function isValidEmail(email: string): boolean {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+  });
+});
+</script> 

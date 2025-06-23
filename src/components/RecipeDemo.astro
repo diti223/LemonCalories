@@ -1,0 +1,142 @@
+---
+// Component: RecipeDemo.astro
+// Purpose: Show before/after example of recipe nutrition analysis
+---
+
+<section class="py-20 bg-gray-50 dark:bg-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+        See the Magic in Action
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+        From messy recipe instructions to precise nutrition data in seconds. 
+        Our AI understands natural language and estimates portions automatically.
+      </p>
+    </div>
+    
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Before: Recipe Input -->
+      <div class="space-y-6">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+              <span class="text-red-600 dark:text-red-400 font-bold">1</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              Paste Your Recipe
+            </h3>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 font-mono text-sm leading-relaxed">
+            <div class="text-gray-700 dark:text-gray-300 space-y-2">
+              <div>• 2 chicken breasts, grilled</div>
+              <div>• 1 tablespoon olive oil</div>
+              <div>• 100g cooked jasmine rice</div>
+              <div>• half an avocado, sliced</div>
+              <div>• some lemon juice and herbs</div>
+              <div>• handful of cherry tomatoes</div>
+              <div class="opacity-60">• salt and pepper to taste</div>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <p class="text-xs text-gray-500 dark:text-gray-400 italic">
+                Serves 2 people as written above
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <div class="inline-flex items-center gap-2 text-lemon-600 dark:text-lemon-400 font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            <span>AI Processing...</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- After: Nutrition Results -->
+      <div class="space-y-6">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+              <span class="text-green-600 dark:text-green-400 font-bold">2</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              Get Instant Nutrition
+            </h3>
+          </div>
+          
+          <div class="space-y-4">
+            <!-- Calories - Main Focus -->
+            <div class="bg-lemon-50 dark:bg-lemon-900/20 rounded-xl p-4">
+              <div class="flex justify-between items-center">
+                <span class="text-lg font-medium text-gray-900 dark:text-white">Total Calories</span>
+                <span class="text-3xl font-bold text-lemon-600 dark:text-lemon-400">720</span>
+              </div>
+              <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Per serving (360 cal each)
+              </div>
+            </div>
+            
+            <!-- Macronutrients -->
+            <div class="grid grid-cols-3 gap-4">
+              <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">55g</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Protein</div>
+                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">31%</div>
+              </div>
+              <div class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                <div class="text-2xl font-bold text-green-600 dark:text-green-400">30g</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Carbs</div>
+                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">17%</div>
+              </div>
+              <div class="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
+                <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">40g</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Fat</div>
+                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">52%</div>
+              </div>
+            </div>
+            
+            <!-- Additional Insights -->
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span>High protein, balanced meal</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                </svg>
+                <span>Estimated fiber: 8g • Sodium: 420mg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <div class="inline-flex items-center gap-2 text-green-600 dark:text-green-400 font-medium">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span>Analysis Complete!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="text-center mt-16">
+      <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
+        Ready to analyze your own recipes?
+      </p>
+      <button class="bg-lemon-500 hover:bg-lemon-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+        Try the Demo Recipe
+      </button>
+    </div>
+  </div>
+</section> 

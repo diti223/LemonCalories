@@ -3,13 +3,29 @@
 // Purpose: Site footer with brand and legal information
 ---
 
-<footer class="bg-gray-900 text-white py-16">
+<footer class="bg-gray-900 dark:bg-gray-950 text-white py-16 border-t dark:border-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
       <div class="md:col-span-2">
         <h3 class="text-2xl font-bold text-lemon-400 mb-2">Lemon Macros</h3>
         <p class="text-gray-300 mb-4">AI-powered recipe nutrition analysis. From recipe to macros in seconds.</p>
         <p class="text-sm text-gray-400">Part of the Lemon Nutrition ecosystem</p>
+        
+        <!-- Theme Toggle -->
+        <div class="mt-4">
+          <button 
+            id="theme-toggle"
+            class="flex items-center space-x-2 text-sm text-gray-400 hover:text-lemon-400 transition-colors"
+          >
+            <svg id="theme-toggle-dark-icon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2L13.09 8.26L20 9L14 14.74L15.18 21.02L10 17.77L4.82 21.02L6 14.74L0 9L6.91 8.26L10 2Z"></path>
+            </svg>
+            <span id="theme-toggle-text">Switch to Light Mode</span>
+          </button>
+        </div>
       </div>
       
       <div>
@@ -32,8 +48,41 @@
       </div>
     </div>
     
-    <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+    <div class="border-t border-gray-800 dark:border-gray-700 mt-8 pt-8 text-center text-gray-400">
       <p>&copy; 2024 Lemon Nutrition. All rights reserved.</p>
     </div>
   </div>
-</footer> 
+</footer>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const darkIcon = document.getElementById('theme-toggle-dark-icon');
+  const lightIcon = document.getElementById('theme-toggle-light-icon');
+  const toggleText = document.getElementById('theme-toggle-text');
+
+  function updateThemeToggle() {
+    if (document.documentElement.classList.contains('dark')) {
+      darkIcon.classList.add('hidden');
+      lightIcon.classList.remove('hidden');
+      toggleText.textContent = 'Switch to Light Mode';
+    } else {
+      lightIcon.classList.add('hidden');
+      darkIcon.classList.remove('hidden');
+      toggleText.textContent = 'Switch to Dark Mode';
+    }
+  }
+
+  themeToggle.addEventListener('click', () => {
+    if (document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+    updateThemeToggle();
+  });
+
+  // Initialize toggle state
+  updateThemeToggle();
+</script> 

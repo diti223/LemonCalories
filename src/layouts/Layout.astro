@@ -8,11 +8,13 @@ export interface Props {
 
 const { title, description = "Paste any recipe and instantly get macronutrients with AI-powered analysis. Get precise protein, carbs, fats, and calories for every dish.", image, noindex = false } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const socialImage = image || '/images/og-image.jpg';
+const socialImage = image || '/og-image.jpg';
+const isProduction = import.meta.env.MODE === 'production';
+const googleAnalyticsId = import.meta.env.GOOGLE_ANALYTICS_ID;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,8 +46,34 @@ const socialImage = image || '/images/og-image.jpg';
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Analytics -->
+  {isProduction && googleAnalyticsId && (
+    <>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}></script>
+      <script is:inline define:vars={{ googleAnalyticsId, title }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', googleAnalyticsId, {
+          page_title: title,
+          page_location: window.location.href
+        });
+      </script>
+    </>
+  )}
+  
+  <!-- Dark mode script -->
+  <script is:inline>
+    // Enable dark mode by default but allow user preference
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
 </head>
-<body class="font-sans antialiased bg-white text-gray-900">
+<body class="font-sans antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
   <slot />
 </body>
 </html> 
